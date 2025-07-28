@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedIntel - Medical Research Platform</title>
+    <link rel="stylesheet" href="css/medical-theme.css" />
+  </head>
+  <body>
+    <!-- Session Status Banner -->
+    <div class="session-banner" id="sessionBanner" style="display: none;">
+      <div class="session-info">
+        <span class="session-status" id="sessionStatus">Initializing secure medical session...</span>
+        <span class="session-expiry" id="sessionExpiry"></span>
+      </div>
+    </div>
+
+    <div class="app-container medical-app" id="app-container">
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="chat-container medical-chat">
+          <div class="chat-header medical-header">
+            <div class="logo medical-logo">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+                <circle cx="12" cy="12" r="10"/>
+              </svg>
+              <h1>MedIntel</h1>
+              <span class="platform-subtitle">Medical Research Platform</span>
+            </div>
+            <div class="medical-controls">
+              <button class="medical-btn session-btn" id="sessionBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <circle cx="12" cy="16" r="1"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Session
+              </button>
+              <button class="medical-btn new-case-btn" id="newChatBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
+                </svg>
+                New Case
+              </button>
+              <button class="medical-btn tools-btn" id="medicalToolsBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                Tools
+              </button>
+            </div>
+          </div>
+
+          <!-- Medical Status Bar -->
+          <div class="medical-status-bar" id="medicalStatusBar">
+            <div class="status-item">
+              <span class="status-label">HIPAA:</span>
+              <span class="status-value compliant">Compliant</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">AI Models:</span>
+              <span class="status-value active" id="aiModelStatus">Gemini 2.5 Pro</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">MCP Tools:</span>
+              <span class="status-value" id="mcpToolsStatus">Loading...</span>
+            </div>
+          </div>
+
+          <div class="messages-container medical-messages" id="messagesContainer">
+            <!-- Medical disclaimer -->
+            <div class="medical-disclaimer">
+              <div class="disclaimer-icon">⚕️</div>
+              <div class="disclaimer-content">
+                <p><strong>Medical AI Assistant</strong></p>
+                <p>This platform provides AI-powered medical research and decision support. All information is for educational purposes and clinical decision support only. Always consult with qualified healthcare professionals for medical advice, diagnosis, or treatment.</p>
+              </div>
+            </div>
+            <div id="messageContent"></div>
+          </div>
+
+          <div class="chat-input-area medical-input">
+            <!-- Medical context quick access -->
+            <div class="medical-context-bar" id="medicalContextBar" style="display: none;">
+              <div class="context-items">
+                <button class="context-btn" data-context="emergency">🚨 Emergency</button>
+                <button class="context-btn" data-context="diagnosis">🔍 Diagnosis</button>
+                <button class="context-btn" data-context="treatment">💊 Treatment</button>
+                <button class="context-btn" data-context="imaging">📷 Imaging</button>
+              </div>
+            </div>
+
+            <form id="chatForm" class="chat-form medical-form">
+              <div class="input-container medical-input-container">
+                <!-- Image upload area will be added by JavaScript -->
+                <textarea
+                  id="messageInput"
+                  class="message-input medical-message-input"
+                  placeholder="Describe symptoms, ask medical questions, or upload medical images for analysis..."
+                  rows="1"
+                ></textarea>
+                <div class="input-actions">
+                  <button type="button" class="action-btn image-btn" id="imageUploadBtn" title="Upload Medical Image">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21,15 16,10 5,21"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="action-btn context-btn" id="contextBtn" title="Patient Context">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </button>
+                  <button type="submit" class="send-button medical-send-btn" id="sendButton">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <line x1="22" y1="2" x2="11" y2="13"/>
+                      <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+
+      <!-- Medical Configuration Panel -->
+      <div class="config-modal-panel medical-config hidden" id="configPanel">
+        <div class="modal-content medical-modal">
+          <button class="modal-close-btn" id="configPanelClose">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+
+          <h3>Medical System Configuration</h3>
+          
+          <div class="config-section">
+            <h4>AI Models</h4>
+            <div class="config-grid">
+              <div class="config-item">
+                <label>Primary Model</label>
+                <code>Google Gemini 2.5 Pro</code>
+                <span class="status status--success">Active</span>
+              </div>
+              <div class="config-item">
+                <label>Fallback Model</label>
+                <code>Groq Llama 3.1 8B</code>
+                <span class="status status--standby">Standby</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-section">
+            <h4>Medical Tools</h4>
+            <div class="tools-grid" id="medicalToolsGrid">
+              <div class="tool-item">
+                <span class="tool-name">Medical Literature Search</span>
+                <span class="status status--success">Active</span>
+              </div>
+              <div class="tool-item">
+                <span class="tool-name">Clinical Trials Search</span>
+                <span class="status status--success">Active</span>
+              </div>
+              <div class="tool-item">
+                <span class="tool-name">Drug Interactions</span>
+                <span class="status status--success">Active</span>
+              </div>
+              <div class="tool-item">
+                <span class="tool-name">Medical Image Analysis</span>
+                <span class="status status--success">Active</span>
+              </div>
+              <div class="tool-item">
+                <span class="tool-name">Differential Diagnosis</span>
+                <span class="status status--success">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-section">
+            <h4>Security & Compliance</h4>
+            <div class="security-status">
+              <div class="security-item">
+                <span class="security-label">HIPAA Compliance</span>
+                <span class="status status--success">Enabled</span>
+              </div>
+              <div class="security-item">
+                <span class="security-label">Data Encryption</span>
+                <span class="status status--success">AES-256</span>
+              </div>
+              <div class="security-item">
+                <span class="security-label">Audit Logging</span>
+                <span class="status status--success">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sample-queries medical-samples">
+            <h4>Sample Medical Queries</h4>
+            <div class="query-buttons" id="sampleQueries">
+              <button class="query-button medical-query" data-query="chest pain">
+                Analyze chest pain with differential diagnosis
+              </button>
+              <button class="query-button medical-query" data-query="headache">
+                Evaluate headache symptoms and red flags
+              </button>
+              <button class="query-button medical-query" data-query="drug interaction">
+                Check drug interactions for multiple medications
+              </button>
+              <button class="query-button medical-query" data-query="clinical trials">
+                Search clinical trials for specific condition
+              </button>
+              <button class="query-button medical-query" data-query="imaging analysis">
+                Upload and analyze medical imaging studies
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient Context Panel -->
+      <div class="context-panel" id="contextPanel" style="display: none;">
+        <div class="context-header">
+          <h3>Patient Context</h3>
+          <button class="context-close" id="contextClose">×</button>
+        </div>
+        <div class="context-content">
+          <!-- Patient context form will be added by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/medical-api.service.js"></script>
+    <script src="js/medical-chat.component.js"></script>
+    <script>
+      // Initialize medical configuration panel
+      document.getElementById('medicalToolsBtn').addEventListener('click', () => {
+        const panel = document.getElementById('configPanel');
+        panel.classList.toggle('hidden');
+      });
+
+      document.getElementById('configPanelClose').addEventListener('click', () => {
+        document.getElementById('configPanel').classList.add('hidden');
+      });
+
+      document.getElementById('contextBtn').addEventListener('click', () => {
+        const panel = document.getElementById('contextPanel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.getElementById('contextClose').addEventListener('click', () => {
+        document.getElementById('contextPanel').style.display = 'none';
+      });
+
+      // Sample query handlers
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('medical-query')) {
+          const query = e.target.dataset.query;
+          const messageInput = document.getElementById('messageInput');
+          if (messageInput) {
+            messageInput.value = e.target.textContent;
+            messageInput.focus();
+          }
+          document.getElementById('configPanel').classList.add('hidden');
+        }
+      });
+
+      // Medical context handlers
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('context-btn') && e.target.dataset.context) {
+          const context = e.target.dataset.context;
+          const contextBar = document.getElementById('medicalContextBar');
+          contextBar.style.display = contextBar.style.display === 'none' ? 'flex' : 'none';
+        }
+      });
+
+      // Session status updates
+      async function updateSessionStatus() {
+        try {
+          const sessionBanner = document.getElementById('sessionBanner');
+          const sessionStatus = document.getElementById('sessionStatus');
+          const sessionExpiry = document.getElementById('sessionExpiry');
+          
+          if (window.medicalChat && window.medicalChat.apiService) {
+            const sessionInfo = window.medicalChat.apiService.getSessionInfo();
+            
+            if (sessionInfo.hasSession) {
+              sessionStatus.textContent = 'Secure medical session active';
+              sessionStatus.className = 'session-status active';
+              
+              const timeLeft = Math.max(0, sessionInfo.timeUntilExpiry);
+              const minutes = Math.floor(timeLeft / 60000);
+              sessionExpiry.textContent = `Expires in ${minutes} minutes`;
+              
+              sessionBanner.style.display = 'block';
+            } else {
+              sessionStatus.textContent = 'No active session';
+              sessionStatus.className = 'session-status inactive';
+              sessionBanner.style.display = 'block';
+            }
+          }
+        } catch (error) {
+          console.error('Session status update failed:', error);
+        }
+      }
+
+      // Update session status every 30 seconds
+      setInterval(updateSessionStatus, 30000);
+      
+      // Initial status update
+      setTimeout(updateSessionStatus, 1000);
+    </script>
+  </body>
+</html>
