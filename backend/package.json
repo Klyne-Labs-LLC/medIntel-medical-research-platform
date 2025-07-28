@@ -1,0 +1,42 @@
+{
+  "name": "medintel-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node server.js",
+    "start": "node server.js",
+    "test:medical": "node --test tests/medical-*.test.js",
+    "lint": "eslint . --ext .js",
+    "security-audit": "npm audit --audit-level high"
+  },
+  "author": "MedIntel Development Team",
+  "license": "ISC",
+  "description": "MedIntel Medical Research Platform Backend",
+  "keywords": ["medical", "healthcare", "ai", "mcp", "diagnosis", "research"],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "@google/generative-ai": "^0.21.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "groq-sdk": "^0.29.0",
+    "multer": "^1.4.5",
+    "crypto-js": "^4.2.0",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "winston": "^3.11.0",
+    "joi": "^17.11.0",
+    "sharp": "^0.33.1",
+    "node-cache": "^5.1.2",
+    "uuid": "^9.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "express-validator": "^7.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "nodemon": "^3.0.2"
+  }
+}
