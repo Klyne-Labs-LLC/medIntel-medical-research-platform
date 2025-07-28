@@ -320,7 +320,7 @@ We welcome contributions to MedIntel! Please read our contribution guidelines:
 
 ## 📄 License
 
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## ⚠️ Medical Disclaimer
 
@@ -330,7 +330,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 
 - **Documentation**: [CLAUDE.md](CLAUDE.md)
 - **Issues**: Create an issue for bug reports or feature requests
-- **Email**: dev@medintel.ai
+- **Email**: anian@klynelabs.com
 - **Medical Support**: Consult with qualified healthcare professionals
 
 ## 🙏 Acknowledgments
